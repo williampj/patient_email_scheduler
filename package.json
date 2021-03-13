@@ -1,0 +1,24 @@
+{
+  "name": "patient_integration_tool",
+  "version": "1.0.0",
+  "description": "Schedules automated emails to patients based on notification status",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/williampj/patient_integration_tool.git"
+  },
+  "author": "William Jackson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/williampj/patient_integration_tool/issues"
+  },
+  "homepage": "https://github.com/williampj/patient_integration_tool#readme",
+  "devDependencies": {
+    "eslint": "^7.22.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  }
+}
