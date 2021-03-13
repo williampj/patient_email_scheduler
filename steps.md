@@ -19,4 +19,6 @@
 
 ![eslint setup](./screenshots/eslint_setup.png)
 
-4. Added `.gitignore` file and set it to ignore `node_modules`
+4. Added `.gitignore` and `eslintignore` files and set them to ignore `node_modules`
+
+5. Added all files and pushed the first commit to the private repo on github
