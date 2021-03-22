@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Schedules automated emails to patients based on notification status",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,5 +21,12 @@
     "eslint": "^7.22.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1"
+  },
+  "dependencies": {
+    "csv-parse": "^4.15.3",
+    "csv-parser": "^3.0.0",
+    "mongodb": "^3.6.4",
+    "node-schedule": "^2.0.0",
+    "nodemailer": "^6.5.0"
   }
 }
