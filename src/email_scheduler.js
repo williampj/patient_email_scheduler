@@ -10,7 +10,7 @@ class EmailScheduler {
   }
 
   scheduleEmails() {
-    const getPatientsWithEmailConsent = async (db) => new Promise((resolve, reject) => {
+    const getPatientsWithEmailConsent = (db) => new Promise((resolve, reject) => {
       const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
       try {
         const consentingPatients = db.collection(this.collectionName)
@@ -48,7 +48,7 @@ class EmailScheduler {
       }
     });
 
-    const scheduleJobs = (emailObjects) => new Promise((resolve, reject) => {
+    const scheduleJobs = async (emailObjects) => new Promise((resolve, reject) => {
       // e-mail transport configuration
       const transporter = nodemailer.createTransport({
         host: 'smtp.humancare.com',
@@ -60,7 +60,7 @@ class EmailScheduler {
           pass: 'secret',
         },
       });
-      // e-mail message options. Add 'to' field for each email
+        // e-mail message options. Add 'to' field for each email
       const mailOptions = {
         from: 'humancare@humancaresystems.com',
         subject: 'Follow up from Human Care Systems',
@@ -81,19 +81,11 @@ class EmailScheduler {
             });
           });
         });
-        resolve();
+        resolve(emailObjects);
       } catch (e) {
         reject(e);
       }
     });
-
-    // loadEmailJobsInDatabase(emailObjects) {
-
-    // }
-    // § Name: “Day 1”, scheduled_date: NOW+1 day
-    // § Name: “Day 2”, scheduled_date: NOW+2 days
-    // § Name: “Day 3”, scheduled_date: NOW+3 days
-    // § Name: “Day 4”, scheduled_date: NOW+4 days
 
     const schedule = async () => {
       let client;
@@ -101,19 +93,9 @@ class EmailScheduler {
         client = await MongoClient.connect(this.url, { useUnifiedTopology: true });
         const db = client.db(this.dbName);
         const patients = await getPatientsWithEmailConsent(db);
-        const emails = await buildEmailObjects(patients);
-        await scheduleJobs(emails);
-
-        // const result = await Promise.all(emails.map(
-        //   (email) => {
-        //     console.log(email);
-        //     return db.collection('Emails').insertOne(email);
-        //   },
-        // ));
-        // await db.collection('Emails').createIndex({ scheduled_date: 1 }, { unique: true });
+        let emails = await buildEmailObjects(patients);
+        emails = await scheduleJobs(emails);
         const result = await db.collection('Emails').insertMany(emails);
-        // emails.
-        // console.log(`${result.toArray().length} emails were inserted in the Emails collection`);
         console.log(`${result.insertedCount} emails were inserted in the Emails collection`);
       } catch (e) {
         console.log(e);
@@ -125,11 +107,5 @@ class EmailScheduler {
     schedule();
   }
 }
-
-// const url = 'mongodb://localhost:27017/';
-// const dbName = 'patientsDatabase';
-// const collectionName = 'Patients';
-
-// new EmailScheduler({ url, dbName, collectionName }).scheduleEmails();
 
 module.exports = EmailScheduler;

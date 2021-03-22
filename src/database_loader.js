@@ -13,8 +13,6 @@ class DatabaseLoader {
   }
 
   loadDatabase() {
-    // return new Promise(resolve, reject) {
-
     const parseCSV = () => new Promise((resolve, reject) => {
       const entries = [];
 
@@ -58,15 +56,3 @@ class DatabaseLoader {
 }
 
 module.exports = DatabaseLoader;
-// const url = 'mongodb://localhost:27017/';
-// const filePath = '../public/patients.csv';
-// const dbName = 'patientsDatabase';
-// const collectionName = 'patients';
-
-// async function main() {
-//   await new DatabaseLoader({
-//     url, filePath, dbName, collectionName,
-//   }).loadDatabase();
-// }
-
-// main();
