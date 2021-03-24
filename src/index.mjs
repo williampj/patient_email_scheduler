@@ -15,7 +15,7 @@ async function main() {
   await (new PatientHandler({
     url, filePath, dbName, collectionName,
   }).loadDatabase());
-  await (new EmailHandler({ url, dbName, collectionName }).buildEmails());
+  (new EmailHandler({ url, dbName, collectionName }).buildEmails());
   // }
 }
 

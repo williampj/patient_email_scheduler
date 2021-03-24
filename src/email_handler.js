@@ -70,6 +70,7 @@ class EmailHandler {
       console.log(e);
     } finally {
       await connection.close();
+      process.exit(0);
     }
   }
 }
