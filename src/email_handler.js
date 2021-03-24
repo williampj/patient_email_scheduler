@@ -11,19 +11,19 @@ class EmailHandler {
   async buildEmails() {
     // This function resolves to an array of patient objects that have valid email addresses
     // and consent to receiving emails
-    const getPatientsWithEmailConsent = (db) => new Promise((resolve, reject) => {
+    const getPatientsWithEmailConsent = async (db) => {
       const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
       try {
-        const consentingPatients = db.collection(this.collectionName)
+        const consentingPatients = await db.collection(this.collectionName)
           .find({ CONSENT: 'Y', 'Email Address': { $regex: EMAIL_REGEX } });
-        resolve(consentingPatients.toArray());
+        return consentingPatients.toArray();
       } catch (e) {
-        reject(e);
+        console.log(e);
       }
-    });
+    };
 
     // Builds and resolves four email objects for each patient object passed to the function
-    const buildEmailObjects = (patients) => new Promise((resolve, reject) => {
+    const buildEmailObjects = (patients) => {
       const MS_PER_DAY = 24 * 60 * 60 * 1000;
       const individualSchedule = () => {
         const dateNow = Date.now();
@@ -36,19 +36,15 @@ class EmailHandler {
         return scheduledEmails;
       };
       const emailObjects = [];
-      try {
-        patients.forEach((patient) => {
-          individualSchedule().forEach((scheduledEmail) => {
-            // Attaches email address to each email
-            const emailWithAddress = Object.assign(scheduledEmail, { 'Email Address': patient['Email Address'] });
-            emailObjects.push(emailWithAddress);
-          });
+      patients.forEach((patient) => {
+        individualSchedule().forEach((scheduledEmail) => {
+          // Attaches email address to each email
+          const emailWithAddress = Object.assign(scheduledEmail, { 'Email Address': patient['Email Address'] });
+          emailObjects.push(emailWithAddress);
         });
-        resolve(emailObjects);
-      } catch (e) {
-        reject(e);
-      }
-    });
+      });
+      return emailObjects;
+    };
 
     let connection;
     try {
@@ -70,6 +66,8 @@ class EmailHandler {
       console.log(e);
     } finally {
       await connection.close();
+      // this line is to ensure that the process completes with a success exit code 0
+      // after closing the database connection.
       process.exit(0);
     }
   }
