@@ -8,7 +8,7 @@
 
 ![npm init](./public/screenshots/npm_init.png)
 
-2. Created a private repo for version control
+1. Created a repo on Github for version control
 
 `git init`
 
