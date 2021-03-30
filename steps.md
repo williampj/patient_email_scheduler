@@ -33,7 +33,7 @@
 ### Patient handler
 
 8. Parsing the CSV file
-   The first step was to read parse the CSV file and convert each line into a object for the database.
+   The first step was to parse the CSV file and convert each line to an object for the database.
 
 ```js
 const fs = require('fs');
@@ -368,7 +368,6 @@ async function main() {
       dbName,
       collectionName
     }).loadDatabase();
-    // Slight timeout ensures all patients are loaded before querying them for email preferences
     await new EmailScheduler({
       url,
       dbName,
